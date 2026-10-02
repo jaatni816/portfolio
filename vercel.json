@@ -1,0 +1,15 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/blog.html", "destination": "/blog", "permanent": true },
+    { "source": "/admin/index.html", "destination": "/admin", "permanent": true },
+    { "source": "/admin/login.html", "destination": "/admin/login", "permanent": true },
+    { "source": "/projects/index.html", "destination": "/projects", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/projects/:slug", "destination": "/projects/index.html" },
+    { "source": "/post/:slug", "destination": "/blog.html" }
+  ]
+}

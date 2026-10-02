@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Nargish | Digital Marketing &amp; AI Tools</title>
+<meta name="description" content="Articles by Nargish about digital marketing, building responsive website projects, and practical tips for using AI tools like Claude, ChatGPT, and Gemini.">
+<meta name="author" content="Nargish">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yourdomain.com/blog">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nargish — Portfolio">
+<meta property="og:title" content="Blog — Nargish | Digital Marketing &amp; AI Tools">
+<meta property="og:description" content="Articles by Nargish about digital marketing, building responsive website projects, and practical tips for using AI tools.">
+<meta property="og:url" content="https://yourdomain.com/blog">
+<meta property="og:image" content="https://yourdomain.com/school-website.webp">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blog — Nargish | Digital Marketing &amp; AI Tools">
+<meta name="twitter:description" content="Articles by Nargish about digital marketing, building responsive website projects, and practical tips for using AI tools.">
+<meta name="twitter:image" content="https://yourdomain.com/game-screenshot.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f7fd;
+    --bg-elevated:#e8f0fb;
+    --violet:#7c5cff;
+    --violet-2:#6d3fe0;
+    --cyan:#0891b2;
+    --text:#131a2c;
+    --text-dim:#5b6478;
+    --line:rgba(19,26,44,0.1);
+    --glass:rgba(255,255,255,0.72);
+    --radius:18px;
+    color-scheme: light;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Manrope', sans-serif;
+    font-size:16px;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  h1,h2,h3,.display{
+    font-family:'Unbounded', sans-serif;
+    line-height:1.1;
+    letter-spacing:-0.01em;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+
+  ::selection{background:var(--violet); color:#fff;}
+
+  /* ---------- nav ---------- */
+  .site-nav{
+    position:fixed; top:0; left:0; width:100%; z-index:900;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px clamp(20px,5vw,64px);
+    background:rgba(243,247,253,0.75);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 8px 30px -20px rgba(19,26,44,0.25);
+  }
+  .logo{
+    font-family:'Unbounded'; font-weight:700; font-size:1.1rem;
+    letter-spacing:0.02em; display:inline-block;
+    transition:transform 0.3s ease;
+  }
+  .logo:hover{transform:translateY(-2px);}
+  .logo span{color:var(--cyan);}
+  .nav-links{display:flex; gap:28px; font-size:0.92rem; color:var(--text-dim);}
+  .nav-links a{position:relative; transition:color 0.25s ease;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a[aria-current="page"]{color:var(--text); font-weight:600;}
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-6px; width:0; height:1px;
+    background:linear-gradient(90deg,var(--violet),var(--cyan));
+    transition:width 0.3s ease;
+  }
+  .nav-links a:hover::after, .nav-links a[aria-current="page"]::after{width:100%;}
+  .nav-toggle{
+    display:none; width:44px; height:44px; border-radius:50%;
+    border:1px solid var(--line); background:var(--glass);
+    align-items:center; justify-content:center; z-index:1000;
+  }
+  .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after{
+    content:''; display:block; width:16px; height:1.5px; background:var(--text);
+    position:relative; transition:transform 0.3s ease, opacity 0.3s ease;
+  }
+  .nav-toggle span::before{position:absolute; top:-5px;}
+  .nav-toggle span::after{position:absolute; top:5px;}
+  .nav-toggle.open span{background:transparent;}
+  .nav-toggle.open span::before{transform:translateY(5px) rotate(45deg);}
+  .nav-toggle.open span::after{transform:translateY(-5px) rotate(-45deg);}
+
+  .mobile-menu{
+    position:fixed; inset:0; background:rgba(243,247,253,0.97);
+    backdrop-filter:blur(12px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:24px; z-index:850;
+    opacity:0; pointer-events:none; transition:opacity 0.35s ease;
+  }
+  .mobile-menu.open{opacity:1; pointer-events:auto;}
+  .mobile-menu a{font-family:'Unbounded'; font-size:1.3rem;}
+
+  @media (max-width:860px){
+    .nav-links{display:none;}
+    .nav-toggle{display:flex;}
+  }
+
+  /* ---------- layout ---------- */
+  section{position:relative; padding:110px clamp(20px,6vw,64px);}
+  .wrap{max-width:1120px; margin:0 auto; position:relative; z-index:2;}
+  .eyebrow{font-size:0.85rem; color:var(--cyan); margin-bottom:14px; font-weight:600;}
+  .section-head{max-width:640px; margin-bottom:48px;}
+  .section-head h2{font-size:clamp(1.6rem,3vw,2.2rem); font-weight:600; margin-bottom:14px;}
+  .section-head p{color:var(--text-dim); font-size:1.02rem; line-height:1.6;}
+
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity 0.8s cubic-bezier(.2,.8,.2,1), transform 0.8s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+
+  /* ---------- blog hero ---------- */
+  #blog-hero{min-height:45vh; display:flex; align-items:center; padding-top:140px;}
+  #blog-hero h1{
+    font-size:clamp(2rem,5vw,3.4rem); font-weight:700;
+    background:linear-gradient(100deg,var(--text) 30%, var(--violet-2) 70%, var(--cyan) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  #blog-hero p{margin-top:16px; color:var(--text-dim); font-size:1.05rem; line-height:1.6; max-width:52ch;}
+  .glow-blob{
+    position:absolute; border-radius:50%; filter:blur(90px); z-index:0; pointer-events:none;
+  }
+  .glow-blob.violet{width:420px; height:420px; background:radial-gradient(circle,rgba(124,92,255,0.25),transparent 70%); top:-10%; right:5%;}
+  .glow-blob.cyan{width:360px; height:360px; background:radial-gradient(circle,rgba(8,145,178,0.2),transparent 70%); bottom:-15%; left:-5%;}
+
+  /* ---------- posts ---------- */
+  .posts-grid{display:flex; flex-direction:column; gap:32px;}
+  .post{
+    background:var(--glass); border:1px solid var(--line); border-radius:22px;
+    padding:clamp(22px,3.5vw,38px); display:grid; grid-template-columns:0.9fr 1.4fr; gap:32px;
+    align-items:center; backdrop-filter:blur(16px);
+    box-shadow:0 18px 44px -26px rgba(19,26,44,0.25);
+    transition:border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .post:hover{border-color:rgba(34,211,238,0.45); box-shadow:0 26px 54px -22px rgba(34,211,238,0.35);}
+  .post-cover{
+    aspect-ratio:16/10; border-radius:16px; overflow:hidden; position:relative;
+    background:linear-gradient(135deg,#3730a3,#8b5cf6 55%,#22d3ee);
+  }
+  .post-cover img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
+  .post-meta{display:flex; gap:12px; flex-wrap:wrap; font-size:0.78rem; color:var(--text-dim); margin-bottom:12px;}
+  .post-meta .cat{color:var(--cyan); font-weight:600;}
+  .post h3{font-size:1.3rem; font-weight:600; margin-bottom:10px;}
+  .post p{color:var(--text-dim); line-height:1.65; margin-bottom:16px; font-size:0.97rem;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 24px; border-radius:999px; font-weight:600; font-size:0.9rem;
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-primary{background:linear-gradient(100deg,var(--violet),var(--cyan)); color:#07070f;}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 10px 30px -8px rgba(139,92,246,0.6);}
+
+  /* ---------- post detail ---------- */
+  .post-detail-wrap{max-width:760px; margin:0 auto;}
+  .post-detail-meta{display:flex; gap:14px; flex-wrap:wrap; font-size:0.82rem; color:var(--text-dim); margin-bottom:22px;}
+  .post-detail-meta .cat{color:var(--cyan); font-weight:600;}
+  .post-detail-cover{border-radius:20px; overflow:hidden; margin-bottom:30px; border:1px solid var(--line);}
+  .post-detail-cover img{width:100%; display:block; object-fit:cover;}
+  .post-detail-body{font-size:1.03rem; line-height:1.85; color:var(--text);}
+  .post-detail-body p{margin-bottom:1.2em;}
+  .post-detail-body h2{font-family:'Unbounded'; font-size:1.25rem; font-weight:600; margin:1.6em 0 .6em; letter-spacing:-0.01em;}
+  .post-detail-body h3{font-family:'Unbounded'; font-size:1.05rem; font-weight:600; margin:1.4em 0 .5em; letter-spacing:-0.01em;}
+  .post-detail-body li{margin:0 0 .5em 1.2em;}
+  .post-detail-body ul{padding-left:6px; margin:0 0 1.2em;}
+  .post-detail-back{margin-top:44px; padding-top:26px; border-top:1px solid var(--line);}
+
+  /* ---------- newsletter ---------- */
+  #newsletter{background:rgba(232,240,251,0.55);}
+  .news-card{
+    background:var(--glass); border:1px solid var(--line); border-radius:22px;
+    padding:clamp(28px,4vw,48px); display:flex; align-items:center; justify-content:space-between;
+    gap:28px; flex-wrap:wrap;
+  }
+  .news-card h2{font-size:clamp(1.4rem,2.4vw,1.8rem); font-weight:600; margin-bottom:8px;}
+  .news-card p{color:var(--text-dim); font-size:0.98rem; max-width:48ch;}
+  .news-form{display:flex; gap:10px; flex-wrap:wrap;}
+  .news-form input{
+    background:rgba(255,255,255,0.9); border:1px solid var(--line); border-radius:999px;
+    padding:14px 20px; min-width:min(300px,70vw); color:var(--text); font-family:inherit; font-size:0.95rem;
+  }
+  .news-form input:focus{outline:none; border-color:var(--violet-2); box-shadow:0 0 0 3px rgba(124,92,255,0.18);}
+  .toast{
+    position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--bg-elevated); border:1px solid var(--line); color:var(--text);
+    padding:12px 22px; border-radius:999px; font-size:0.88rem; z-index:1200;
+    opacity:0; pointer-events:none; transition:opacity 0.3s ease, transform 0.3s ease;
+    box-shadow:0 16px 36px -16px rgba(19,26,44,0.35);
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  /* ---------- footer ---------- */
+  footer{padding:52px clamp(20px,6vw,64px) 28px; color:var(--text-dim); border-top:1px solid var(--line); background:rgba(232,240,251,0.55);}
+  .footer-top{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:32px; max-width:1120px; margin:0 auto;}
+  .footer-brand .logo{display:inline-block; margin-bottom:12px;}
+  .footer-brand p{font-size:0.9rem; max-width:32ch; line-height:1.6;}
+  .footer-bottom{max-width:1120px; margin:32px auto 0; padding-top:22px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-size:0.85rem;}
+
+  @media (max-width:860px){
+    .post{grid-template-columns:1fr;}
+    .news-card{justify-content:center; text-align:center;}
+  }
+</style>
+</head>
+<body>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Nargish Blog",
+  "description": "Articles about digital marketing, websites, and AI tools.",
+  "url": "https://yourdomain.com/blog"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://yourdomain.com/"},
+    {"@type":"ListItem","position":2,"name":"Blog","item":"https://yourdomain.com/blog"}
+  ]
+}
+</script>
+
+<header>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="logo" href="/" aria-label="Nargish — home">Nargish<span>.</span></a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/#about">About</a>
+      <a href="/#projects">Projects</a>
+      <a href="/blog" aria-current="page">Blog</a>
+      <a href="/#contact">Contact</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span></button>
+  </nav>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+  <a href="/">Home</a>
+  <a href="/#about">About</a>
+  <a href="/#projects">Projects</a>
+  <a href="/blog">Blog</a>
+  <a href="/#contact">Contact</a>
+</nav>
+
+<main>
+
+<!-- ================= BLOG HERO ================= -->
+<section id="blog-hero">
+  <div class="glow-blob violet" aria-hidden="true"></div>
+  <div class="glow-blob cyan" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="eyebrow">Blog</div>
+    <h1 id="post-title">Notes on marketing, websites and AI tools</h1>
+    <p id="post-subtitle">Saving what I learn while studying digital marketing and building small projects with AI — short posts, honest lessons, no fluff.</p>
+  </div>
+</section>
+
+<!-- ================= POSTS ================= -->
+<section id="posts" aria-labelledby="posts-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Latest posts</div>
+      <h2 id="posts-title">Recent articles</h2>
+      <p>Things I've figured out recently and want to remember — or share.</p>
+    </div>
+    <div class="posts-grid">
+
+      <article class="post reveal">
+        <div class="post-cover">
+          <img src="school-website.webp" alt="Adarsh School website projects portfolio screenshot" width="846" height="576" loading="lazy" decoding="async">
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="cat">Websites</span>
+            <span>Sep 2026</span>
+            <span>6 min read</span>
+          </div>
+          <h3>How I built a school website faster with AI</h3>
+          <p>I designed and built the Adarsh School website with HTML, CSS, and JavaScript — and used Claude as a typing partner for the parts that slowed me down. Here is the run-through of that build.</p>
+          <a href="#" class="btn btn-primary" data-search-msg>Read the full post</a>
+        </div>
+      </article>
+
+      <article class="post reveal">
+        <div class="post-cover">
+          <img src="game-screenshot.webp" alt="Warm Zone snake game web development portfolio project screenshot" width="530" height="464" loading="lazy" decoding="async">
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="cat">Experiments</span>
+            <span>Aug 2026</span>
+            <span>4 min read</span>
+          </div>
+          <h3>Making a multiplayer-style game taught me more than any course</h3>
+          <p>Building Warm Zone with TypeScript pushed me to think about state, timing, and polish. A short breakdown of the mistakes I made and what I would do differently.</p>
+          <a href="#" class="btn btn-primary" data-search-msg>Read the full post</a>
+        </div>
+      </article>
+
+      <article class="post reveal">
+        <div class="post-cover">
+          <img src="https://cdn.simpleicons.org/googlegemini" alt="" width="64" height="64" loading="lazy" decoding="async">
+        </div>
+        <div class="post-body">
+          <div class="post-meta">
+            <span class="cat">AI tools</span>
+            <span>Jul 2026</span>
+            <span>7 min read</span>
+          </div>
+          <h3>Three AI tools that changed how I work as a digital marketing student</h3>
+          <p>A practical Listicle of the tools I reach for daily — writing, research, and building — and the exact ways I use them without leaning on them too hard.</p>
+          <a href="#" class="btn btn-primary" data-search-msg>Read the full post</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= NEWSLETTER ================= -->
+<section id="newsletter" aria-labelledby="newsletter-title">
+  <div class="wrap">
+    <div class="news-card reveal">
+      <div>
+        <h2 id="newsletter-title">Get the next post in your inbox</h2>
+        <p>Occasional updates on what I build and learn. No spam, unsubscribe anytime.</p>
+      </div>
+      <form class="news-form" id="newsForm">
+        <input type="email" id="news-email" required placeholder="you@example.com" aria-label="Email address">
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="logo" href="/" aria-label="Nargish — home">Nargish<span>.</span></a>
+      <p>Digital marketer in training, learning to build faster and think sharper with AI tools.</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; <span id="year"></span> Nargish. All rights reserved.</span>
+    <a href="/" style="color:var(--cyan); text-decoration:underline;">Back to portfolio</a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/supabase-loader.js?v=2" defer></script>
+<script src="/supabase.config.js?v=4" defer></script>
+<script src="/blog.js?v=5" defer></script>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const navToggle = document.getElementById('navToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+navToggle.addEventListener('click', ()=>{
+  navToggle.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a=>{
+  a.addEventListener('click', ()=>{
+    navToggle.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  });
+});
+
+const toast = document.getElementById('toast');
+let toastTimer;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> toast.classList.remove('show'), 2600);
+}
+document.querySelectorAll('[data-search-msg]').forEach(el=>{
+  el.addEventListener('click', (e)=>{
+    e.preventDefault();
+    showToast('Full post draft abhi nahi likha — apna content yahan add karein');
+  });
+});
+document.getElementById('newsForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  showToast('Thanks! Connect this form to an email service to send it live');
+  e.target.reset();
+});
+
+const revealEls = document.querySelectorAll('.reveal:not(.in-view)');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('in-view');
+      io.unobserve(entry.target);
+    }
+  });
+}, {threshold:0.15, rootMargin:'0px 0px -60px 0px'});
+revealEls.forEach(el=> io.observe(el));
+</script>
+</body>
+</html>

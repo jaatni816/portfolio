@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Nargish</title>
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-store">
+<meta name="description" content="Admin dashboard">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f7fd; --panel:#ffffff; --violet:#7c5cff; --violet-2:#6d3fe0; --cyan:#0891b2;
+    --text:#131a2c; --text-dim:#5b6478; --line:rgba(19,26,44,0.1);
+    --ok:#059669; --risk:#e11d48; --warn:#d97706;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg); color:var(--text); font-family:'Manrope',sans-serif; font-size:16px; -webkit-font-smoothing:antialiased;}
+  .topbar{position:sticky; top:0; z-index:30; background:rgba(243,247,253,0.9); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
+  .topbar-inner{max-width:1280px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .brand{font-family:'Unbounded'; font-weight:700; font-size:1rem;}
+  .brand a{color:var(--text); text-decoration:none;}
+  .brand span{color:var(--cyan);}
+  .tag{font-size:.7rem; background:rgba(124,92,255,0.12); color:var(--violet-2); font-weight:700; padding:3px 9px; border-radius:999px; letter-spacing:.04em; text-transform:uppercase; margin-left:6px;}
+  .top-actions{display:flex; gap:12px; align-items:center;}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 22px; border-radius:999px; font-weight:700; font-size:.92rem; border:1px solid transparent; cursor:pointer; transition:transform .3s ease, box-shadow .3s ease, background .3s ease; text-decoration:none; color:inherit;}
+  .btn-primary{background:linear-gradient(100deg,var(--violet),var(--cyan)); color:#07070f;}
+  .btn-ghost{background:transparent; border-color:var(--line); color:var(--text-dim);}
+  .btn:hover:not(:disabled){transform:translateY(-1px);}
+  .btn-primary:hover{box-shadow:0 10px 26px -8px rgba(139,92,246,0.55);}
+  .btn:disabled{opacity:.6; cursor:not-allowed;}
+  /* shell layout */
+  .shell{max-width:1280px; margin:0 auto; padding:24px 24px 80px; display:flex; gap:24px; align-items:flex-start;}
+  .sidebar{width:230px; flex-shrink:0; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:14px 10px; position:sticky; top:92px; display:flex; flex-direction:column; gap:18px;}
+  .side-label{font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--text-dim); padding:0 12px;}
+  .side-nav{display:flex; flex-direction:column; gap:6px;}
+  .tab{display:flex; align-items:center; gap:11px; width:100%; padding:13px 14px; border-radius:13px; border:1px solid transparent; background:transparent; color:var(--text-dim); font-weight:700; font-size:.92rem; cursor:pointer; transition:all .22s ease; text-align:left;}
+  .tab .ico{width:22px; text-align:center; font-size:1rem; opacity:.9;}
+  .tab:hover{background:rgba(124,92,255,0.08); color:var(--text);}
+  .tab.active{background:linear-gradient(100deg,var(--violet),var(--cyan)); color:#07070f; box-shadow:0 10px 24px -12px rgba(124,92,255,0.6);}
+  .tab .badge{margin-left:auto; font-size:.7rem; background:rgba(19,26,44,0.08); color:var(--text-dim); padding:2px 9px; border-radius:999px;}
+  .tab.active .badge{background:rgba(7,7,15,0.18); color:#07070f;}
+  .side-foot{margin-top:auto; padding-top:12px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:6px;}
+  .side-link{display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:13px; color:var(--text-dim); font-weight:600; font-size:.88rem; text-decoration:none; transition:all .22s ease; background:none; border:0; cursor:pointer; font-family:inherit; text-align:left; width:100%;}
+  .side-link:hover{background:rgba(19,26,44,0.05); color:var(--text);}
+  .side-link.logout{color:var(--risk);}
+  .side-link.logout:hover{background:rgba(225,29,72,0.08); color:var(--risk);}
+  .user-chip{display:flex; align-items:center; gap:11px; padding:10px 12px; background:rgba(19,26,44,0.03); border:1px solid var(--line); border-radius:13px;}
+  .u-avatar{width:36px; height:36px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,var(--violet),var(--cyan)); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.95rem;}
+  .u-info{min-width:0;}
+  .u-name{display:block; font-size:.84rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .u-mail{display:block; font-size:.72rem; color:var(--text-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:150px;}
+  .main{flex:1; min-width:0;}
+  .view{display:none;}
+  .view.active{display:block;}
+  /* overview */
+  .stats-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; margin-bottom:24px;}
+  .stat{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px;}
+  .stat .num{font-family:'Unbounded'; font-size:1.9rem; font-weight:700;}
+  .stat .lbl{color:var(--text-dim); font-size:.85rem; margin-top:6px; font-weight:600;}
+  .ov-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px;}
+  .panel-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .panel-head h3{font-family:'Unbounded'; font-size:.9rem; font-weight:600;}
+  .panel-head .linkbtn{background:none; border:0; color:var(--violet-2); font-weight:700; font-size:.82rem; cursor:pointer;}
+  .mini{display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line);}
+  .mini:last-child{border-bottom:0;}
+  .mini .t{flex:1; min-width:0; font-size:.9rem; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .mini .d{font-size:.74rem; color:var(--text-dim);}
+  .mini .edit-small{background:none; border:0; color:var(--violet-2); font-weight:700; font-size:.8rem; cursor:pointer; flex-shrink:0;}
+  /* list rows */
+  .loading-box{display:flex; align-items:center; gap:12px; color:var(--text-dim); padding:36px 0;}
+  .spinner{width:20px;height:20px;border:3px solid rgba(124,92,255,0.25); border-top-color:var(--violet-2); border-radius:50%; animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .list{display:grid; grid-template-columns:1fr; gap:14px;}
+  .item{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px 18px; display:flex; gap:16px; align-items:center; transition:box-shadow .3s ease;}
+  .item:hover{box-shadow:0 14px 34px -22px rgba(19,26,44,0.5);}
+  .thumb{width:76px; height:76px; border-radius:12px; overflow:hidden; background:linear-gradient(135deg,#e5e7eb,#d1d5db); flex-shrink:0; display:flex; align-items:center; justify-content:center;}
+  .thumb img{width:100%; height:100%; object-fit:cover;}
+  .thumb .ph{color:#9ca3af; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;}
+  .item-body{flex:1; min-width:0;}
+  .item-top{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .item-title{font-family:'Unbounded'; font-size:.95rem; font-weight:600;}
+  .slug{color:var(--text-dim); font-size:.74rem; font-family:monospace; background:rgba(19,26,44,0.05); padding:2px 8px; border-radius:6px;}
+  .cat{font-size:.7rem; font-weight:700; background:rgba(8,145,178,0.1); color:#0e7490; padding:3px 9px; border-radius:999px;}
+  .item-desc{color:var(--text-dim); font-size:.88rem; line-height:1.5; margin-top:6px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .tech{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  .tech span{font-size:.72rem; font-weight:600; background:rgba(8,145,178,0.1); color:#0e7490; padding:3px 9px; border-radius:999px;}
+  .item-meta{margin-top:8px; font-size:.75rem; color:var(--text-dim); display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+  .item-meta a{color:var(--violet-2); font-weight:700; text-decoration:none;}
+  .item-meta a:hover{text-decoration:underline;}
+  .item-actions{display:flex; gap:8px; flex-shrink:0; flex-wrap:wrap; justify-content:flex-end;}
+  .chip{display:inline-flex; align-items:center; gap:6px; padding:9px 14px; border-radius:999px; border:1px solid var(--line); background:transparent; font-weight:700; font-size:.8rem; cursor:pointer; transition:all .25s ease; color:inherit; text-decoration:none;}
+  .chip:hover{transform:translateY(-1px);}
+  .chip.edit{color:var(--violet-2);}
+  .chip.del{color:var(--risk); border-color:rgba(225,29,72,0.3);}
+  .chip.pub{color:var(--ok); border-color:rgba(5,150,105,0.3);}
+  .chip.unpub{color:var(--warn); border-color:rgba(217,119,6,0.3);}
+  .empty{padding:44px 20px; text-align:center; color:var(--text-dim); background:var(--panel); border:1px dashed var(--line); border-radius:16px; font-size:.92rem; line-height:1.7;}
+  .empty button{margin-top:14px;}
+  .page-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:18px;}
+  h2.pageh{font-family:'Unbounded'; font-size:1.4rem; font-weight:600;}
+  .count{color:var(--text-dim); font-size:.88rem; margin-top:5px;}
+  /* modals */
+  .modal{position:fixed; inset:0; z-index:40; display:none; align-items:flex-start; justify-content:center; padding:24px; overflow-y:auto; background:rgba(12,16,30,0.5); backdrop-filter:blur(4px);}
+  .modal.open{display:flex;}
+  .modal-card{background:#fff; border-radius:20px; width:100%; max-width:660px; padding:34px clamp(20px,5vw,38px); margin-top:3vh; box-shadow:0 30px 80px -30px rgba(12,16,30,0.6); animation:pop .28s ease;}
+  @keyframes pop{from{opacity:0; transform:translateY(12px);} to{opacity:1; transform:none;}}
+  .modal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;}
+  .modal-head h2{font-family:'Unbounded'; font-size:1.2rem; font-weight:600;}
+  .closebtn{background:none; border:0; font-size:1.5rem; cursor:pointer; color:var(--text-dim); line-height:1; padding:4px;}
+  .closebtn:hover{color:var(--risk);}
+  .fgrid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .f{display:flex; flex-direction:column; gap:7px; margin-bottom:14px;}
+  .f.full{grid-column:1 / -1;}
+  .f label{font-size:.82rem; font-weight:700; color:var(--text-dim);}
+  .f label .req{color:var(--risk);}
+  .f input, .f textarea, .f select{
+    width:100%; border:1px solid var(--line); border-radius:12px; padding:12px 14px;
+    font-family:inherit; font-size:.93rem; color:var(--text); background:#fbfcfe; transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .f input:focus, .f textarea:focus, .f select:focus{outline:none; border-color:var(--violet-2); box-shadow:0 0 0 3px rgba(124,92,255,0.16);}
+  .f textarea{resize:vertical; min-height:110px; line-height:1.6;}
+  .f input[type="file"]{padding:10px;}
+  .f input[type="checkbox"]{width:auto;}
+  .check-row{display:flex; align-items:center; gap:10px; margin-bottom:14px; font-size:.9rem; font-weight:600;}
+  .check-row input{width:18px;height:18px;accent-color:var(--violet-2);}
+  .slug-hint{font-size:.72rem; color:var(--text-dim);}
+  .upwrap{display:flex; gap:14px; align-items:center; flex-wrap:wrap;}
+  .up-preview{width:74px; height:74px; border-radius:12px; overflow:hidden; background:linear-gradient(135deg,#e5e7eb,#d1d5db); flex-shrink:0; display:flex; align-items:center; justify-content:center;}
+  .up-preview img{width:100%; height:100%; object-fit:cover;}
+  .up-preview .ph{color:#9ca3af; font-size:.65rem; font-weight:700; text-transform:uppercase;}
+.form-err{background:rgba(225,29,72,0.08); border:1px solid rgba(225,29,72,0.3); color:var(--risk); font-size:.85rem; padding:10px 13px; border-radius:12px; margin-bottom:14px; display:none; line-height:1.5;}
+.form-err.show{display:block;}
+.retrybtn{margin-top:12px; display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:999px; border:1px solid var(--line); background:rgba(124,92,255,0.12); color:var(--text); font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; transition:all .25s ease;}
+.retrybtn:hover:not(:disabled){background:linear-gradient(100deg,var(--violet),var(--cyan)); color:#07070f; border-color:transparent;}
+.retrybtn:disabled{opacity:.6; cursor:progress;}
+  .modal-foot{display:flex; justify-content:flex-end; gap:12px; margin-top:6px;}
+  .toast{position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); z-index:60; padding:13px 22px; border-radius:999px; font-size:.88rem; font-weight:700; color:#fff; opacity:0; transition:all .35s ease; max-width:90vw; text-align:center; box-shadow:0 14px 34px -16px rgba(12,16,30,0.5);}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast.ok{background:var(--ok);}
+  .toast.err{background:var(--risk);}
+  .fatal{display:none;}
+  /* settings */
+  .settings-wrap{display:flex; flex-direction:column; gap:18px;}
+  .s-panel{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px;}
+  .s-panel-head{margin-bottom:18px;}
+  .s-panel-head h3{font-family:'Unbounded'; font-size:.95rem; font-weight:600; margin-bottom:4px;}
+  .s-panel-head p{color:var(--text-dim); font-size:.82rem;}
+  .s-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap;}
+  .s-foot .hint{color:var(--text-dim); font-size:.82rem;}
+  @media (max-width:940px){
+    .shell{flex-direction:column; padding:16px 14px 60px;}
+    .sidebar{width:100%; position:static; padding:12px; gap:12px;}
+    .side-nav{flex-direction:row; overflow-x:auto;}
+    .tab{white-space:nowrap; flex-shrink:0;}
+    .side-label{display:none;}
+    .side-foot{flex-direction:row; border-top:0; padding-top:0;}
+    .side-link{flex:1; justify-content:center;}
+  }
+  @media (max-width:680px){
+    .fgrid{grid-template-columns:1fr;}
+    .ov-grid{grid-template-columns:1fr;}
+    .item{flex-direction:column; align-items:flex-start;}
+    .item-actions{width:100%; justify-content:flex-start;}
+    .topbar-inner{padding:14px 16px;}
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><a href="/">Nargish<span>.</span></a><span class="tag">Admin</span></div>
+      <div class="top-actions">
+        <a class="btn btn-ghost" href="/projects" target="_blank" rel="noopener">View site</a>
+        <a class="btn btn-ghost" href="/blog" target="_blank" rel="noopener">Blog</a>
+        <button class="btn btn-ghost" id="logoutBtn" type="button">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="side-label">Menu</div>
+      <nav class="side-nav" aria-label="Admin navigation">
+        <button class="tab active" data-view="overview" type="button"><span class="ico">⌂</span> Overview</button>
+        <button class="tab" data-view="projects" type="button"><span class="ico">▦</span> Projects <span class="badge" id="pjBadge">0</span></button>
+        <button class="tab" data-view="posts" type="button"><span class="ico">✎</span> Blog <span class="badge" id="psBadge">0</span></button>
+        <button class="tab" data-view="skills" type="button"><span class="ico">◆</span> Skills <span class="badge" id="skBadge">0</span></button>
+        <button class="tab" data-view="settings" type="button"><span class="ico">⚙</span> Settings</button>
+      </nav>
+      <div class="side-foot">
+        <div class="user-chip" id="userChip">
+          <span class="u-avatar" id="uAvatar">N</span>
+          <span class="u-info"><span class="u-name" id="uName">Admin</span><span class="u-mail" id="uMail">…</span></span>
+        </div>
+        <a class="side-link" href="/" target="_blank" rel="noopener"><span class="ico">⊕</span> View portfolio</a>
+        <button class="side-link logout" id="sidebarLogout" type="button"><span class="ico">⎋</span> Log out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <!-- ============ OVERVIEW ============ -->
+      <section class="view active" id="view-overview" aria-label="Overview">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="ov-grid">
+          <div class="panel">
+            <div class="panel-head"><h3>Recent projects</h3><button class="linkbtn" data-goto="projects" type="button">View all &rarr;</button></div>
+            <div id="ovProjects"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Recent posts</h3><button class="linkbtn" data-goto="posts" type="button">View all &rarr;</button></div>
+            <div id="ovPosts"></div>
+          </div>
+        </div>
+        <div class="panel" style="text-align:center;">
+          <p style="color:var(--text-dim); font-size:.92rem; margin-bottom:16px;">Kuch add karna ho to section kholo — projects aur blog dono admin se manage hote hain.</p>
+          <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <button class="btn btn-primary" data-goto="projects" data-new="project" type="button">+ New project</button>
+            <button class="btn btn-ghost" data-goto="posts" data-new="post" type="button">+ New blog post</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PROJECTS ============ -->
+      <section class="view" id="view-projects" aria-label="Project Manager">
+        <div class="page-head">
+          <div>
+            <h2 class="pageh">Project Manager</h2>
+            <div class="count" id="countText">Loading…</div>
+          </div>
+          <button class="btn btn-primary" id="addBtn" type="button">+ New project</button>
+        </div>
+        <div class="loading-box" id="loadingBox"><span class="spinner"></span> <span>Projects load ho rahe hain…</span></div>
+        <div class="empty" id="emptyBox" style="display:block;">Projects load nahi hue.</div>
+        <div class="list" id="list" style="display:none;"></div>
+      </section>
+
+      <!-- ============ BLOG ============ -->
+      <section class="view" id="view-posts" aria-label="Blog">
+        <div class="page-head">
+          <div>
+            <h2 class="pageh">Blog posts</h2>
+            <div class="count" id="psCountText">Loading…</div>
+          </div>
+          <button class="btn btn-primary" id="addPostBtn" type="button">+ New post</button>
+        </div>
+        <div class="loading-box" id="psLoadingBox"><span class="spinner"></span> <span>Posts load ho rahe hain…</span></div>
+        <div class="empty" id="psEmptyBox" style="display:block;">Posts load nahi hue.</div>
+        <div class="list" id="psList" style="display:none;"></div>
+      </section>
+
+      <!-- ============ SKILLS ============ -->
+      <section class="view" id="view-skills" aria-label="Skills">
+        <div class="page-head">
+          <div>
+            <h2 class="pageh">Skills</h2>
+            <div class="count" id="skCountText">Loading…</div>
+          </div>
+          <button class="btn btn-primary" id="addSkillBtn" type="button">+ New skill</button>
+        </div>
+        <div class="loading-box" id="skLoadingBox"><span class="spinner"></span> <span>Skills load ho rahe hain…</span></div>
+        <div class="empty" id="skEmptyBox" style="display:block;">Skills load nahi hue.</div>
+        <div class="list" id="skList" style="display:none;"></div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section class="view" id="view-settings" aria-label="Settings">
+        <div class="page-head">
+          <div>
+            <h2 class="pageh">Settings</h2>
+            <div class="count">Portfolio profile aur social links — ye info website pe dikhegi.</div>
+          </div>
+        </div>
+        <div class="loading-box" id="stLoadingBox"><span class="spinner"></span> <span>Settings load ho rahe hain…</span></div>
+        <div class="settings-wrap" id="stWrap" style="display:none;">
+          <div class="form-err" id="stFormErr" role="alert"></div>
+
+          <div class="s-panel">
+            <div class="s-panel-head"><h3>Profile</h3><p>Homepage ke hero, contact aur footer mein use hota hai.</p></div>
+            <div class="fgrid">
+              <div class="f"><label for="stSiteName">Site / Name</label><input type="text" id="stSiteName" placeholder="Nargish"></div>
+              <div class="f"><label for="stTagline">Role / Tagline</label><input type="text" id="stTagline" placeholder="Digital Marketing Student"></div>
+              <div class="f"><label for="stEmail">Email</label><input type="email" id="stEmail" placeholder="you@example.com"></div>
+              <div class="f"><label for="stLocation">Location</label><input type="text" id="stLocation" placeholder="e.g. Rohtak, India"></div>
+              <div class="f full"><label for="stAbout">About (short bio)</label><textarea id="stAbout" placeholder="2-3 line apne baare mein…" style="min-height:90px;"></textarea></div>
+            </div>
+          </div>
+
+          <div class="s-panel">
+            <div class="s-panel-head"><h3>Social links</h3><p>Koi nahi hai to khali chhodo — unsah disclosed button nahi dikhega.</p></div>
+            <div class="fgrid">
+              <div class="f"><label for="stGithub">GitHub</label><input type="url" id="stGithub" placeholder="https://github.com/username"></div>
+              <div class="f"><label for="stLinkedin">LinkedIn</label><input type="url" id="stLinkedin" placeholder="https://linkedin.com/in/username"></div>
+              <div class="f"><label for="stTwitter">Twitter / X</label><input type="url" id="stTwitter" placeholder="https://x.com/username"></div>
+              <div class="f"><label for="stInstagram">Instagram</label><input type="url" id="stInstagram" placeholder="https://instagram.com/username"></div>
+            </div>
+          </div>
+
+          <div class="s-foot">
+            <button class="btn btn-primary" id="stSaveBtn" type="button">Save settings</button>
+            <span class="hint" id="stState">Khali chhoda hua field apni jagah static rahega.</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="empty fatal" id="noConfig"></div>
+    </main>
+  </div>
+
+  <!-- ============ PROJECT MODAL ============ -->
+  <div class="modal" id="pjModal" role="dialog" aria-modal="true" aria-labelledby="pjModalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="pjModalTitle">New project</h2>
+        <button class="closebtn" id="pjCloseBtn" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div class="form-err" id="pjFormErr" role="alert"></div>
+      <form id="projectForm" novalidate>
+        <div class="fgrid">
+          <div class="f full">
+            <label for="fTitle">Title <span class="req">*</span></label>
+            <input type="text" id="fTitle" required placeholder="e.g. School Website">
+          </div>
+          <div class="f full">
+            <label for="fDesc">Description</label>
+            <textarea id="fDesc" placeholder="2-3 line mein project ke baare mein likho (list aur homepage pe dikhta hai)" style="min-height:90px;"></textarea>
+          </div>
+          <div class="f full">
+            <label for="fTech">Tech stack</label>
+            <input type="text" id="fTech" placeholder="HTML, CSS, JS (comma se)">
+          </div>
+          <div class="f">
+            <label for="fLive">Live URL</label>
+            <input type="url" id="fLive" placeholder="https://…">
+          </div>
+          <div class="f">
+            <label for="fGit">GitHub URL</label>
+            <input type="url" id="fGit" placeholder="https://github.com/…">
+          </div>
+          <div class="f full">
+            <label class="check-row"><input type="checkbox" id="fFeatured"> Featured project (homepage pe pehle dikhega)</label>
+          </div>
+          <div class="f full">
+            <label>Screenshot <span class="req">*</span></label>
+            <div class="upwrap">
+              <div class="up-preview" id="imgPreview"><span class="ph">IMG</span></div>
+              <div style="flex:1; min-width:200px;">
+                <input type="file" id="fImg" accept="image/png,image/jpeg,image/webp">
+                <div class="slug-hint" id="uploadState">PNG/JPEG/WebP. Public bucket mein upload hota hai.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" id="pjCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Save project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ POST MODAL ============ -->
+  <div class="modal" id="psModal" role="dialog" aria-modal="true" aria-labelledby="psModalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="psModalTitle">New blog post</h2>
+        <button class="closebtn" id="psCloseBtn" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div class="form-err" id="psFormErr" role="alert"></div>
+      <form id="postForm" novalidate>
+        <div class="fgrid">
+          <div class="f full">
+            <label for="psTitle">Title <span class="req">*</span></label>
+            <input type="text" id="psTitle" required placeholder="e.g. How I built a school website faster with AI">
+          </div>
+          <div class="f">
+            <label for="psSlug">Slug</label>
+            <input type="text" id="psSlug" placeholder="auto-from-title">
+            <span class="slug-hint">Title se auto generate hota hai.</span>
+          </div>
+          <div class="f">
+            <label for="psCategory">Category</label>
+            <select id="psCategory">
+              <option value="AI tools">AI tools</option>
+              <option value="Websites">Websites</option>
+              <option value="Experiments">Experiments</option>
+              <option value="Marketing">Marketing</option>
+            </select>
+          </div>
+          <div class="f full">
+            <label for="psExcerpt">Excerpt <span class="req">*</span></label>
+            <textarea id="psExcerpt" required placeholder="2-3 line ka short summary" style="min-height:64px;"></textarea>
+          </div>
+          <div class="f full">
+            <label for="psContent">Content <span class="req">*</span></label>
+            <textarea id="psContent" required placeholder="Poora article — paragraphs newline se alag karo" style="min-height:180px;"></textarea>
+          </div>
+          <div class="f full">
+            <label>Cover image</label>
+            <div class="upwrap">
+              <div class="up-preview" id="psImgPreview"><span class="ph">IMG</span></div>
+              <div style="flex:1; min-width:200px;">
+                <input type="file" id="psImg" accept="image/png,image/jpeg,image/webp">
+                <div class="slug-hint" id="psUploadState">PNG/JPEG/WebP. Public bucket mein upload hota hai.</div>
+              </div>
+            </div>
+          </div>
+          <div class="f full">
+            <label class="check-row"><input type="checkbox" id="psPublished" checked> Published (public site pe dikhega)</label>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" id="psCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="psSaveBtn">Save post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ SKILLS MODAL ============ -->
+  <div class="modal" id="skModal" role="dialog" aria-modal="true" aria-labelledby="skModalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="skModalTitle">New skill</h2>
+        <button class="closebtn" id="skCloseBtn" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div class="form-err" id="skFormErr" role="alert"></div>
+      <form id="skillForm" novalidate>
+        <div class="fgrid">
+          <div class="f">
+            <label for="skName">Name <span class="req">*</span></label>
+            <input type="text" id="skName" required placeholder="e.g. Claude">
+            <span class="slug-hint">Homepage skills section mein dikhta hai.</span>
+          </div>
+          <div class="f">
+            <label for="skCategory">Category</label>
+            <select id="skCategory">
+              <option value="AI tools">AI tools</option>
+              <option value="Web / Coding">Web / Coding</option>
+              <option value="Design">Design</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="f full">
+            <label>Icon (logo image URL)</label>
+            <div class="upwrap">
+              <div class="up-preview" id="skIconPreview"><span class="ph">ICON</span></div>
+              <div style="flex:1; min-width:200px;">
+                <input type="url" id="skIcon" placeholder="https://cdn.simpleicons.org/claude">
+                <span class="slug-hint">Agar khali chhodo to name ka pehla letter dikhega: <code>https://cdn.simpleicons.org/</code> se free icons le sakte ho.</span>
+              </div>
+            </div>
+          </div>
+          <div class="f full">
+            <label for="skOrder">Order (chhota number pehle)</label>
+            <input type="number" id="skOrder" min="0" placeholder="0">
+            <span class="slug-hint">Onkar / Up-down arrows se bhi naya order set hota hai.</span>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" id="skCancelBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="skSaveBtn">Save skill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="/supabase-loader.js?v=2" defer></script>
+  <script src="/supabase.config.js?v=4" defer></script>
+  <script src="/admin/admin.js?v=10" defer></script>
+</body>
+</html>

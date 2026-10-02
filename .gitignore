@@ -1,0 +1,20 @@
+# local env / secrets
+.env
+.env.local
+.env.*.local
+*.pem
+
+# dependencies
+node_modules/
+
+# build / hosting
+.next/
+out/
+dist/
+build/
+.vercel/
+
+# system / editor
+.DS_Store
+Thumbs.db
+*.log

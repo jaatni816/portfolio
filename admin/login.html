@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Nargish</title>
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-store">
+<meta name="description" content="Admin login">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f7fd; --bg-elevated:#e8f0fb;
+    --violet:#7c5cff; --violet-2:#6d3fe0; --cyan:#0891b2;
+    --text:#131a2c; --text-dim:#5b6478;
+    --line:rgba(19,26,44,0.1); --glass:rgba(255,255,255,0.72);
+    --risk:#e11d48;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Manrope',sans-serif;
+    font-size:16px; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:24px; -webkit-font-smoothing:antialiased;
+  }
+  .glow{position:fixed; border-radius:50%; filter:blur(90px); z-index:0; pointer-events:none;}
+  .glow.a{width:420px;height:420px;background:radial-gradient(circle,rgba(124,92,255,0.25),transparent 70%); top:-10%; left:50%; transform:translateX(-50%);}
+  .glow.b{width:360px;height:360px;background:radial-gradient(circle,rgba(8,145,178,0.18),transparent 70%); bottom:-12%; right:-6%;}
+  .card{
+    position:relative; z-index:2; width:100%; max-width:420px;
+    background:var(--glass); border:1px solid var(--line); border-radius:20px;
+    padding:38px clamp(24px,5vw,40px); backdrop-filter:blur(16px);
+    box-shadow:0 24px 60px -30px rgba(19,26,44,0.45);
+  }
+  .logo{font-family:'Unbounded'; font-weight:700; font-size:1.15rem; letter-spacing:.02em; display:block; margin-bottom:26px;}
+  .logo span{color:var(--cyan);}
+  h1{font-family:'Unbounded'; font-size:1.5rem; font-weight:600; margin-bottom:8px;}
+  .sub{color:var(--text-dim); font-size:.95rem; line-height:1.6; margin-bottom:26px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block; font-size:.84rem; color:var(--text-dim); margin-bottom:8px; font-weight:600;}
+  .field input{
+    width:100%; background:rgba(255,255,255,0.92); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; color:var(--text); font-family:inherit; font-size:1rem;
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .field input:focus{outline:none; border-color:var(--violet-2); box-shadow:0 0 0 3px rgba(124,92,255,0.18);}
+  .btn{
+    width:100%; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:15px 26px; border:0; border-radius:999px; font-weight:700; font-size:.98rem;
+    background:linear-gradient(100deg,var(--violet),var(--cyan)); color:#07070f; cursor:pointer;
+    transition:transform .3s ease, box-shadow .3s ease, opacity .3s ease;
+  }
+  .btn:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 12px 30px -8px rgba(139,92,246,0.6);}
+  .btn:disabled{opacity:.6; cursor:not-allowed;}
+  .back{display:inline-block; margin-top:22px; color:var(--text-dim); font-size:.85rem; text-decoration:underline; text-underline-offset:3px; transition:color .25s ease;}
+  .back:hover{color:var(--violet-2);}
+  .error{
+    display:none; background:rgba(225,29,72,0.08); border:1px solid rgba(225,29,72,0.3);
+    color:var(--risk); font-size:.88rem; padding:11px 14px; border-radius:12px; margin-bottom:18px; line-height:1.5;
+  }
+  .error.show{display:block;}
+  .hint{color:var(--text-dim); font-size:.8rem; margin-top:16px; text-align:center; line-height:1.5;}
+  .spinner{width:16px;height:16px;border:2px solid rgba(7,7,15,0.3);border-top-color:#07070f;border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+  <div class="glow a" aria-hidden="true"></div>
+  <div class="glow b" aria-hidden="true"></div>
+
+  <div class="card" role="main">
+    <a class="logo" href="/">Nargish<span>.</span></a>
+    <h1>Admin login</h1>
+    <p class="sub">Apne Supabase Auth credentials se login karein. Ye page sirf admin ke liye hai.</p>
+
+    <div class="error" id="errorBox" role="alert"></div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required autocomplete="email" placeholder="admin@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn" id="submitBtn">Login</button>
+    </form>
+
+    <div class="hint" id="configHint" style="display:none;">Supabase config set nahi hui — <code>supabase.config.js</code> mein keys bharo.</div>
+    <a class="back" href="/">Back to portfolio</a>
+  </div>
+
+  <script src="/supabase-loader.js?v=2" defer></script>
+  <script src="/supabase.config.js?v=3" defer></script>
+  <script src="/admin/login.js?v=5" defer></script>
+</body>
+</html>
