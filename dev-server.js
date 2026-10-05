@@ -89,13 +89,19 @@ const config = (() => {
 
 const rewrites = config.rewrites || [];
 const redirects = (config.redirects || []).map((r) => ({
-  pattern: new RegExp("^" + r.source.replace(/:[A-Za-z_]\w*/g, "[^/]+") + "/?$"),
+  pattern: new RegExp("^" + r.source.replace(/:[A-Za-z_]\w*\*?/g, (match) => {
+    if (match.endsWith('*')) return '.*';
+    return '[^/]+';
+  }) + "/?$"),
   destination: r.destination,
   permanent: r.permanent !== false,
 }));
 
 const toRegExp = (source) =>
-  new RegExp("^" + source.replace(/:[A-Za-z_]\w*/g, "[^/]+") + "/?$");
+  new RegExp("^" + source.replace(/:[A-Za-z_]\w*\*?/g, (match) => {
+    if (match.endsWith('*')) return '.*';
+    return '[^/]+';
+  }) + "/?$");
 
 function send(res, status, filePath) {
   fs.readFile(filePath, (err, data) => {
