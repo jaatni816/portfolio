@@ -5,6 +5,63 @@ const path = require("path");
 const root = __dirname;
 const port = Number(process.env.PORT) || 3000;
 
+try {
+  require('dotenv').config({ path: path.join(root, '.env.local') });
+} catch (e) {
+}
+
+async function handleApiRoute(req, res, urlPath) {
+  const apiPath = path.join(root, urlPath + '.js');
+  if (!fs.existsSync(apiPath)) {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: 'API route not found' }));
+    return;
+  }
+
+  let body = '';
+  req.on('data', chunk => body += chunk);
+  req.on('end', async () => {
+    try {
+      req.body = body ? JSON.parse(body) : {};
+      req.method = req.method;
+      req.headers = req.headers;
+
+      const apiModule = require(apiPath);
+      const apiRes = {
+        statusCode: 200,
+        headers: {},
+        body: null,
+        status(code) {
+          this.statusCode = code;
+          return this;
+        },
+        setHeader(name, value) {
+          this.headers[name] = value;
+          return this;
+        },
+        json(data) {
+          this.body = data;
+          res.writeHead(this.statusCode, {
+            "Content-Type": "application/json",
+            ...this.headers
+          });
+          res.end(JSON.stringify(data));
+        },
+        end(data) {
+          res.writeHead(this.statusCode, this.headers);
+          res.end(data);
+        }
+      };
+
+      await apiModule(req, apiRes);
+    } catch (error) {
+      console.error('API error:', error);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: 'Internal server error' }));
+    }
+  });
+}
+
 const types = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -77,8 +134,13 @@ function resolve(urlPath) {
 }
 
 http
-  .createServer((req, res) => {
+  .createServer(async (req, res) => {
     const urlPath = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+
+    if (urlPath.startsWith('/api/')) {
+      await handleApiRoute(req, res, urlPath);
+      return;
+    }
 
     if (urlPath.includes("..")) {
       res.writeHead(403).end("Forbidden");
