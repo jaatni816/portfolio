@@ -1,5 +1,5 @@
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'your-email@example.com';
+const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'bangernargish@gmail.com';
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {

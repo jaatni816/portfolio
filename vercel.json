@@ -10,6 +10,7 @@
   ],
   "rewrites": [
     { "source": "/projects/:slug", "destination": "/projects/index.html" },
-    { "source": "/post/:slug", "destination": "/blog.html" }
+    { "source": "/post/:slug", "destination": "/blog.html" },
+    { "source": "/api/:path*", "destination": "/api/:path*" }
   ]
 }
