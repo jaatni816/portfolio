@@ -1,7 +1,6 @@
-const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'bangernargish@gmail.com';
-
 module.exports = async (req, res) => {
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'bangernargish@gmail.com';
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -23,7 +22,12 @@ module.exports = async (req, res) => {
 
   if (!RESEND_API_KEY) {
     console.error('RESEND_API_KEY not configured');
-    return res.status(500).json({ error: 'Server configuration error' });
+    return res.status(500).json({ error: 'Server configuration error: RESEND_API_KEY is not set' });
+  }
+
+  if (!TO_EMAIL) {
+    console.error('CONTACT_TO_EMAIL not configured');
+    return res.status(500).json({ error: 'Server configuration error: CONTACT_TO_EMAIL is not set' });
   }
 
   try {

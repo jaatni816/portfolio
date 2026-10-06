@@ -5,10 +5,29 @@ const path = require("path");
 const root = __dirname;
 const port = Number(process.env.PORT) || 3000;
 
-try {
-  require('dotenv').config({ path: path.join(root, '.env.local') });
-} catch (e) {
-}
+// dotenv overrides nothing already in process.env (Render/Vercel env vars win)
+// order matters: .env.local (gitignored, local overrides) then .env (committed defaults).
+// Node NEVER overwrites an existing process.env, so already-set platform vars are safe.
+const loadDotEnv = (file) => {
+  try {
+    const { error } = require('dotenv').config({ path: path.join(root, file) });
+    if (error) console.warn(`[dotenv] ${file} not found or unreadable —`, error.message);
+    return true;
+  } catch (e) {
+    console.error(`[dotenv] Failed to load ${file}:`, e.message);
+    return false;
+  }
+};
+loadDotEnv('.env.local');
+loadDotEnv('.env');
+
+const hasKey = (v) => typeof v === 'string' && v.length > 0;
+console.log('[env] RESEND_API_KEY:', hasKey(process.env.RESEND_API_KEY)
+  ? `set (${process.env.RESEND_API_KEY.slice(0, 10)}...)`
+  : 'MISSING');
+console.log('[env] CONTACT_TO_EMAIL:', hasKey(process.env.CONTACT_TO_EMAIL)
+  ? 'set'
+  : 'MISSING (falling back to default in api/contact.js)');
 
 async function handleApiRoute(req, res, urlPath) {
   const apiPath = path.join(root, urlPath + '.js');

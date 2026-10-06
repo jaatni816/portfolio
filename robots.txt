@@ -4,4 +4,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /admin
 
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://nargishportfolio.vercel.app/sitemap.xml
