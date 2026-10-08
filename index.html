@@ -60,6 +60,9 @@
     position:fixed; inset:0; width:100%; height:100%;
     z-index:0; pointer-events:none;
   }
+  @media (max-width: 699px){
+    #bubbles{display:none;}
+  }
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
@@ -1098,13 +1101,14 @@ filterTabs.forEach(tab=>{
   });
 });
 
-/* ---------------- lightweight ambient bubbles (CSS-based, no canvas on mobile) ---------------- */
-(function(){
+/* ---------------- lightweight ambient bubbles (deferred init) ---------------- */
+const initBubbles = () => {
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = window.innerWidth < 700;
   if (prefersReduced || isMobile) return;
 
   const cvs = document.getElementById('bubbles');
+  if (!cvs) return;
   const ctx = cvs.getContext('2d');
   let W, H, rafId;
   function resize(){
@@ -1115,9 +1119,9 @@ filterTabs.forEach(tab=>{
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, {passive:true});
 
-  const count = W < 700 ? 12 : (W < 1200 ? 20 : 30);
+  const count = W < 1200 ? 20 : 30;
   const colors = ['124,92,255','8,145,178','109,63,224','34,211,238'];
   const bubbles = [];
   for(let i=0;i<count;i++){
@@ -1181,7 +1185,13 @@ filterTabs.forEach(tab=>{
     }
   });
   obs.observe(heroSection);
-})();
+};
+
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(initBubbles, {timeout: 2000});
+} else {
+  setTimeout(initBubbles, 0);
+}
 
 </script>
 </body>
