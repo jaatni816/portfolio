@@ -20,6 +20,78 @@
 <meta name="twitter:title" content="Nargish — Digital Marketer &amp; AI Tools Enthusiast">
 <meta name="twitter:description" content="Digital marketing student building websites, games and AI-powered experiments.">
 <meta name="twitter:image" content="https://nargishportfolio.vercel.app/school-website.webp">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Who are you?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "I'm Nargish, a Digital Marketer who loves exploring AI tools to build smarter marketing strategies."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What services do you offer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "I help with digital marketing strategy, content planning, and using AI tools to make marketing work faster and smarter."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you work with AI tools?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, I actively explore and use AI tools to improve marketing campaigns, content creation, and automation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are you available for freelance work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, I'm open to freelance projects and collaborations. Feel free to reach out through the contact form."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How can I contact you?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can use the contact form below, or connect with me on LinkedIn and GitHub (links in the footer)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you have any projects I can see?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, check out the Projects section above to see my work and case studies."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are you currently studying or working?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "I'm currently learning and growing in the field of digital marketing while working on real projects and AI experiments."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you write about marketing and AI?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, I share my learnings and insights on Medium. You can find the link in the footer."
+      }
+    }
+  ]
+}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='1' stop-color='%230891b2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='48' fill='url(%23g)'/%3E%3Ctext x='50' y='66' font-size='60' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='white'%3EN%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -501,6 +573,32 @@
     border-radius:999px; border:1px solid rgba(34,211,238,0.4); color:var(--cyan);
   }
 
+  /* ---------- faq ---------- */
+  #faq{background:rgba(243,247,253,0.55); position:relative; overflow:hidden;}
+  #faq::before{
+    content:''; position:absolute; top:-15%; right:-10%; width:480px; height:480px; border-radius:50%;
+    background:radial-gradient(circle,rgba(124,92,255,0.18),transparent 70%); filter:blur(70px);
+    pointer-events:none;
+  }
+  .faq-list{display:flex; flex-direction:column; gap:14px; max-width:800px; margin:0 auto;}
+  .faq-item{border:1px solid var(--line); border-radius:14px; background:var(--glass); overflow:hidden; backdrop-filter:blur(16px);}
+  .faq-question{
+    width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:20px 24px; background:transparent; border:none; text-align:left;
+    font-family:'Manrope', sans-serif; font-size:1rem; font-weight:600; color:var(--text);
+    cursor:pointer; transition:background 0.25s ease;
+  }
+  .faq-question:hover{background:rgba(124,92,255,0.04);}
+  .faq-question:focus-visible{outline:2px solid var(--violet); outline-offset:-2px;}
+  .faq-icon{
+    width:24px; height:24px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    color:var(--cyan); transition:transform 0.3s cubic-bezier(.2,.8,.2,1);
+  }
+  .faq-item.open .faq-icon{transform:rotate(180deg);}
+  .faq-answer{max-height:0; overflow:hidden; transition:max-height 0.4s cubic-bezier(.2,.8,.2,1), padding 0.3s ease;}
+  .faq-answer-inner{padding:0 24px 20px; color:var(--text-dim); line-height:1.7; font-size:0.95rem;}
+  .faq-answer-inner p{margin:0;}
+
   /* ---------- contact ---------- */
   #contact{background:rgba(243,247,253,0.55); position:relative; overflow:hidden;}
   #contact::before{
@@ -647,6 +745,7 @@
     <a href="#projects">Projects</a>
     <a href="/blog">Blog</a>
     <a href="#timeline">Education</a>
+    <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileMenu"><span></span></button>
@@ -659,6 +758,7 @@
   <a href="#projects">Projects</a>
   <a href="/blog">Blog</a>
   <a href="#timeline">Education</a>
+  <a href="#faq">FAQ</a>
   <a href="#contact">Contact</a>
 </div>
 
@@ -828,6 +928,107 @@
   </div>
 </section>
 
+<!-- ================= FAQ ================= -->
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2>Frequently Asked Questions</h2>
+      <p>Quick answers to common questions before you reach out.</p>
+    </div>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+          <span>Who are you?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-1" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>I'm Nargish, a Digital Marketer who loves exploring AI tools to build smarter marketing strategies.</p>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+          <span>What services do you offer?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-2" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>I help with digital marketing strategy, content planning, and using AI tools to make marketing work faster and smarter.</p>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+          <span>Do you work with AI tools?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-3" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>Yes, I actively explore and use AI tools to improve marketing campaigns, content creation, and automation.</p>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+          <span>Are you available for freelance work?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-4" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>Yes, I'm open to freelance projects and collaborations. Feel free to reach out through the contact form.</p>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
+          <span>How can I contact you?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-5" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>You can use the contact form below, or connect with me on LinkedIn and GitHub (links in the footer).</p>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-6">
+          <span>Do you have any projects I can see?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-6" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>Yes, check out the Projects section above to see my work and case studies.</p>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-7">
+          <span>Are you currently studying or working?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-7" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>I'm currently learning and growing in the field of digital marketing while working on real projects and AI experiments.</p>
+          </div>
+        </div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-8">
+          <span>Do you write about marketing and AI?</span>
+          <svg class="faq-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="faq-answer" id="faq-answer-8" role="region" aria-hidden="true">
+          <div class="faq-answer-inner">
+            <p>Yes, I share my learnings and insights on Medium. You can find the link in the footer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= CONTACT ================= -->
 <section id="contact">
   <div class="wrap">
@@ -900,6 +1101,7 @@
           <li><a href="#projects">Projects</a></li>
           <li><a href="/blog">Blog</a></li>
           <li><a href="#timeline">Education</a></li>
+          <li><a href="#faq">FAQ</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
@@ -1085,6 +1287,27 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   document.querySelectorAll('.social-card').forEach(el=> attachTilt(el, 6));
   document.querySelectorAll('.fact-item').forEach(el=> attachTilt(el, 7));
 }
+
+/* ---------------- FAQ accordion ---------------- */
+const faqQuestions = document.querySelectorAll('.faq-question');
+faqQuestions.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const item = btn.closest('.faq-item');
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+    if(isOpen){
+      item.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      answer.setAttribute('aria-hidden', 'true');
+      answer.style.maxHeight = '0';
+    } else {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      answer.setAttribute('aria-hidden', 'false');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
 
 /* ---------------- project filter tabs ---------------- */
 const filterTabs = document.querySelectorAll('.filter-tab');
