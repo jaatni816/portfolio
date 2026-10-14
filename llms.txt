@@ -1,0 +1,12 @@
+# Nargish - Digital Marketer & AI Tools Enthusiast
+
+> Portfolio website of Nargish, a Digital Marketer who explores AI tools to build smarter marketing strategies.
+
+## Pages
+- [Home](https://nargishportfolio.vercel.app/): About Nargish, skills, and introduction
+- [Projects](https://nargishportfolio.vercel.app/projects/): List of projects and case studies
+- [Blog](https://nargishportfolio.vercel.app/blog.html): Articles on marketing, SEO, and AI tools
+- [Contact](https://nargishportfolio.vercel.app/#contact): How to reach Nargish
+
+## About
+Nargish is a Digital Marketer and AI Tools Enthusiast. Specializes in digital marketing strategy, content planning, SEO, and using AI tools (Claude, ChatGPT, Gemini, Google AI Studio, Replit, Suno AI, VS Code) for marketing automation and content creation.

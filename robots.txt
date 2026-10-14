@@ -4,4 +4,20 @@ Allow: /
 Disallow: /admin/
 Disallow: /admin
 
+# AI crawlers - explicitly allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://nargishportfolio.vercel.app/sitemap.xml
