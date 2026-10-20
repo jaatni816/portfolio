@@ -1,6 +1,8 @@
 # Nargish Banger - Digital Marketer & AI Tools Enthusiast
 
-> Portfolio website of Nargish Banger, a Digital Marketer who explores AI tools to build smarter marketing strategies.
+> Portfolio website of Nargish Banger, a Digital Marketer and Web Developer who explores AI tools to build smarter marketing strategies.
+
+Also known as: Nargish, Nargishbanger
 
 ## Pages
 - [Home](https://nargishportfolio.vercel.app/): About Nargish Banger, skills, and introduction
@@ -9,4 +11,4 @@
 - [Contact](https://nargishportfolio.vercel.app/#contact): How to reach Nargish Banger
 
 ## About
-Nargish Banger is a Digital Marketer and AI Tools Enthusiast. Specializes in digital marketing strategy, content planning, SEO, and using AI tools (Claude, ChatGPT, Gemini, Google AI Studio, Replit, Suno AI, VS Code) for marketing automation and content creation.
+Nargish Banger (also known as Nargish or Nargishbanger) is a Digital Marketer and Web Developer exploring AI tools (Claude, ChatGPT, Gemini, Google AI Studio, Replit, Suno AI, VS Code) for marketing strategy, web development, and content creation.
