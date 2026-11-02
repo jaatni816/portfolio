@@ -200,6 +200,7 @@
         <button class="tab" data-view="projects" type="button"><span class="ico">▦</span> Projects <span class="badge" id="pjBadge">0</span></button>
         <button class="tab" data-view="posts" type="button"><span class="ico">✎</span> Blog <span class="badge" id="psBadge">0</span></button>
         <button class="tab" data-view="skills" type="button"><span class="ico">◆</span> Skills <span class="badge" id="skBadge">0</span></button>
+        <button class="tab" data-view="photos" type="button"><span class="ico">🖼</span> Photos <span class="badge" id="phBadge">0</span></button>
         <button class="tab" data-view="settings" type="button"><span class="ico">⚙</span> Settings</button>
       </nav>
       <div class="side-foot">
@@ -278,7 +279,22 @@
         <div class="list" id="skList" style="display:none;"></div>
       </section>
 
-      <!-- ============ SETTINGS ============ -->
+       <!-- ============ PHOTOS ============ -->
+       <section class="view" id="view-photos" aria-label="Photos">
+         <div class="page-head">
+           <div>
+             <h2 class="pageh">Photos</h2>
+             <div class="count" id="phCountText">Loading…</div>
+           </div>
+           <label class="btn btn-primary" for="phFileInput" style="cursor:pointer;">+ Upload photo</label>
+           <input type="file" id="phFileInput" accept="image/png,image/jpeg,image/webp" style="display:none;">
+         </div>
+         <div class="loading-box" id="phLoadingBox"><span class="spinner"></span> <span>Photos load ho rahe hain…</span></div>
+         <div class="empty" id="phEmptyBox" style="display:block;">Photos load nahi hue.</div>
+         <div class="list" id="phList" style="display:none;"></div>
+       </section>
+
+       <!-- ============ SETTINGS ============ -->
       <section class="view" id="view-settings" aria-label="Settings">
         <div class="page-head">
           <div>

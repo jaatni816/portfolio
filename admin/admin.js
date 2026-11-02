@@ -11,7 +11,8 @@
     toast: document.getElementById('toast'),
     pjBadge: document.getElementById('pjBadge'),
     psBadge: document.getElementById('psBadge'),
-    skBadge: document.getElementById('skBadge')
+    skBadge: document.getElementById('skBadge'),
+    phBadge: document.getElementById('phBadge')
   };
 
   var pj = {
@@ -102,6 +103,14 @@
     addBtn: document.getElementById('addSkillBtn')
   };
 
+  var ph = {
+    loadingBox: document.getElementById('phLoadingBox'),
+    emptyBox: document.getElementById('phEmptyBox'),
+    list: document.getElementById('phList'),
+    countText: document.getElementById('phCountText'),
+    fileInput: document.getElementById('phFileInput')
+  };
+
   var skModal = {
     root: document.getElementById('skModal'),
     title: document.getElementById('skModalTitle'),
@@ -119,7 +128,7 @@
 
   var skEditingId = null;
 
-  var cache = { projects: null, posts: null, skills: null, settings: null };
+  var cache = { projects: null, posts: null, skills: null, settings: null, photos: null };
 
   // ---------- speed / reliability helpers ----------
   var NET_TIMEOUT = 15000;   // kisi bhi query par max wait
@@ -268,6 +277,7 @@
     if(v === 'projects'){ loadProjects(); }
     if(v === 'posts'){ loadPosts(); }
     if(v === 'skills'){ loadSkills(); }
+    if(v === 'photos'){ loadPhotos(); }
     if(v === 'settings'){ loadSettings(); }
   }
 
@@ -1269,6 +1279,83 @@ create policy "projects_delete" on public.projects for delete to authenticated u
     });
   }
 
+  // ---------- PHOTOS ----------
+  function renderPhotos(items){
+    if(!items || !items.length){
+      ph.list.style.display = 'none';
+      ph.emptyBox.style.display = 'block';
+      ph.emptyBox.innerHTML = '<strong>Abhi koi photo nahi hai.</strong>';
+      ph.countText.textContent = '0 photos';
+      if(els.phBadge) els.phBadge.textContent = 0;
+      return;
+    }
+    ph.emptyBox.style.display = 'none';
+    ph.list.style.display = 'grid';
+    ph.countText.textContent = items.length + ' photo' + (items.length > 1 ? 's' : '');
+    if(els.phBadge) els.phBadge.textContent = items.length;
+    ph.list.innerHTML = items.map(function(it){
+      var url = it.url || it.publicUrl || '';
+      return '<div class="item">' +
+        '<div class="thumb" aria-hidden="true"><img src="' + url + '" alt="photo" loading="lazy"></div>' +
+        '<div class="item-body"><div class="item-desc" style="word-break:break-all;font-size:.78rem;">' + esc(url) + '</div></div>' +
+        '<div class="item-actions">' +
+          '<button type="button" class="chip edit" data-phcopy="' + esc(url) + '">Copy URL</button>' +
+          '<button type="button" class="chip del" data-phdel="' + esc(it.name || it.path || '') + '">Delete</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function loadPhotos(force){
+    if(!supabase){ showFatal('client'); return; }
+    showLoading(ph.loadingBox, 'Photos load ho rahe hain…');
+    ph.emptyBox.style.display = 'none';
+    ph.list.style.display = 'none';
+    supabase.storage.from('portfolio-media').list('', { limit: 100 }).then(function(r){
+      hideLoading(ph.loadingBox);
+      if(r.error){
+        ph.list.style.display = 'none';
+        ph.emptyBox.style.display = 'block';
+        ph.emptyBox.className = 'empty';
+        ph.emptyBox.innerHTML = retryBox(netError(r.error, 'portfolio-media'));
+        return;
+      }
+      var items = (r.data || []).filter(function(f){ return f.name && !f.name.endsWith('/'); }).map(function(f){
+        var pub = supabase.storage.from('portfolio-media').getPublicUrl(f.name);
+        return { name: f.name, path: f.name, url: pub.data.publicUrl };
+      });
+      cache.photos = items;
+      renderPhotos(items);
+    }).catch(function(err){
+      hideLoading(ph.loadingBox);
+      ph.list.style.display = 'none';
+      ph.emptyBox.style.display = 'block';
+      ph.emptyBox.className = 'empty';
+      ph.emptyBox.innerHTML = retryBox(netError(err, 'portfolio-media'));
+    });
+  }
+
+  function uploadPhoto(file){
+    if(!file) return;
+    if(!/image\/(png|jpeg|webp|jpg)/.test(file.type)){
+      toast('Sirf PNG/JPEG/WebP allowed hain.', 'err'); return;
+    }
+    if(file.size > 3 * 1024 * 1024){
+      toast('Image 3MB se bada hai.', 'err'); return;
+    }
+    var path = 'photo-' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    showLoading(ph.loadingBox, 'Upload ho raha hai…');
+    supabase.storage.from('portfolio-media').upload(path, file, { contentType: file.type, upsert: false }).then(function(up){
+      hideLoading(ph.loadingBox);
+      if(up.error){ toast('Upload fail: ' + (up.error.message || 'error'), 'err'); return; }
+      toast('Photo upload ho gayi ✓', 'ok');
+      loadPhotos(true);
+    }).catch(function(err){
+      hideLoading(ph.loadingBox);
+      toast('Upload error: ' + (err && err.message ? err.message : 'unknown'), 'err');
+    });
+  }
+
   // ---------- boot ----------
   document.addEventListener('DOMContentLoaded', function(){
 
@@ -1352,7 +1439,31 @@ create policy "projects_delete" on public.projects for delete to authenticated u
     els.logoutBtn.addEventListener('click', doLogout);
     document.getElementById('sidebarLogout').addEventListener('click', doLogout);
 
-    st.saveBtn.addEventListener('click', saveSettings);
+    ph.fileInput.addEventListener('change', function(e){
+      var f = e.target.files && e.target.files[0];
+      if(f) uploadPhoto(f);
+      e.target.value = '';
+    });
+
+    ph.list.addEventListener('click', function(e){
+      var cp = e.target.closest('[data-phcopy]');
+      var del = e.target.closest('[data-phdel]');
+      if(cp){
+        var u = cp.getAttribute('data-phcopy');
+        if(navigator.clipboard) navigator.clipboard.writeText(u);
+        toast('URL copy ho gaya ✓', 'ok');
+        return;
+      }
+      if(del){
+        var name = del.getAttribute('data-phdel');
+        if(!window.confirm('Delete this photo?')) return;
+        supabase.storage.from('portfolio-media').remove([name]).then(function(r){
+          if(r.error){ toast('Delete fail: ' + (r.error.message || 'error'), 'err'); return; }
+          toast('Photo delete ho gayi.', 'ok');
+          loadPhotos(true);
+        });
+      }
+    });
 
     // skills
     skModal.closeBtn.addEventListener('click', function(){ closeModal(skModal.root); });
