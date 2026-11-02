@@ -201,6 +201,7 @@
         <button class="tab" data-view="posts" type="button"><span class="ico">✎</span> Blog <span class="badge" id="psBadge">0</span></button>
         <button class="tab" data-view="skills" type="button"><span class="ico">◆</span> Skills <span class="badge" id="skBadge">0</span></button>
         <button class="tab" data-view="photos" type="button"><span class="ico">🖼</span> Photos <span class="badge" id="phBadge">0</span></button>
+        <button class="tab" data-view="footer" type="button"><span class="ico">⏷</span> Footer</button>
         <button class="tab" data-view="settings" type="button"><span class="ico">⚙</span> Settings</button>
       </nav>
       <div class="side-foot">
@@ -292,6 +293,38 @@
          <div class="loading-box" id="phLoadingBox"><span class="spinner"></span> <span>Photos load ho rahe hain…</span></div>
          <div class="empty" id="phEmptyBox" style="display:block;">Photos load nahi hue.</div>
          <div class="list" id="phList" style="display:none;"></div>
+       </section>
+
+       <!-- ============ FOOTER ============ -->
+       <section class="view" id="view-footer" aria-label="Footer">
+         <div class="page-head">
+           <div>
+             <h2 class="pageh">Footer</h2>
+             <div class="count">Footer text, copyright and social links.</div>
+           </div>
+         </div>
+         <div class="settings-wrap" id="ftWrap">
+           <div class="form-err" id="ftFormErr" role="alert"></div>
+           <div class="s-panel">
+             <div class="s-panel-head"><h3>Footer content</h3></div>
+             <div class="fgrid">
+               <div class="f full"><label for="ftText">Footer text</label><textarea id="ftText" style="min-height:80px;"></textarea></div>
+               <div class="f full"><label for="ftCopyright">Copyright line</label><input type="text" id="ftCopyright"></div>
+             </div>
+           </div>
+           <div class="s-panel">
+             <div class="s-panel-head"><h3>Social links</h3><p>Empty hides that icon.</p></div>
+             <div class="fgrid">
+               <div class="f"><label for="ftLinkedin">LinkedIn</label><input type="url" id="ftLinkedin"></div>
+               <div class="f"><label for="ftGithub">GitHub</label><input type="url" id="ftGithub"></div>
+               <div class="f"><label for="ftInstagram">Instagram</label><input type="url" id="ftInstagram"></div>
+               <div class="f"><label for="ftEmail">Email</label><input type="email" id="ftEmail"></div>
+             </div>
+           </div>
+           <div class="s-foot">
+             <button class="btn btn-primary" id="ftSaveBtn" type="button">Save footer</button>
+           </div>
+         </div>
        </section>
 
        <!-- ============ SETTINGS ============ -->

@@ -111,6 +111,13 @@
     fileInput: document.getElementById('phFileInput')
   };
 
+  var ft = {
+    wrap: document.getElementById('ftWrap'),
+    formErr: document.getElementById('ftFormErr'),
+    saveBtn: document.getElementById('ftSaveBtn'),
+    fields: { footer_text: 'ftText', copyright_line: 'ftCopyright', linkedin: 'ftLinkedin', github: 'ftGithub', instagram: 'ftInstagram', email: 'ftEmail' }
+  };
+
   var skModal = {
     root: document.getElementById('skModal'),
     title: document.getElementById('skModalTitle'),
@@ -278,6 +285,7 @@
     if(v === 'posts'){ loadPosts(); }
     if(v === 'skills'){ loadSkills(); }
     if(v === 'photos'){ loadPhotos(); }
+    if(v === 'footer'){ loadFooter(); }
     if(v === 'settings'){ loadSettings(); }
   }
 
@@ -1356,6 +1364,32 @@ create policy "projects_delete" on public.projects for delete to authenticated u
     });
   }
 
+  function loadFooter(){
+    if(!supabase){ showFatal('client'); return; }
+    withTimeout(supabase.from('site_settings').select('*').limit(1), NET_TIMEOUT, 'Footer').then(function(r){
+      var row = (r.data && r.data[0]) || {};
+      for(var k in ft.fields){
+        var el = document.getElementById(ft.fields[k]);
+        if(el) el.value = row[k] || '';
+      }
+    }).catch(function(){});
+  }
+
+  function saveFooter(){
+    var data = { id: 1 };
+    for(var k in ft.fields){
+      var el = document.getElementById(ft.fields[k]);
+      data[k] = el ? (el.value.trim() || null) : null;
+    }
+    ft.saveBtn.disabled = true;
+    supabase.from('site_settings').upsert(data, { onConflict: 'id' }).then(function(r){
+      ft.saveBtn.disabled = false;
+      if(r.error){ ft.formErr.className='form-err show'; ft.formErr.textContent='Save fail: '+(r.error.message||'error'); return; }
+      ft.formErr.className='form-err';
+      toast('Footer saved ✓','ok');
+    });
+  }
+
   // ---------- boot ----------
   document.addEventListener('DOMContentLoaded', function(){
 
@@ -1584,6 +1618,9 @@ create policy "projects_delete" on public.projects for delete to authenticated u
         window.location.href = '/admin/login';
       });
     }
+
+    if(st.saveBtn) st.saveBtn.addEventListener('click', saveSettings);
+    if(ft.saveBtn) ft.saveBtn.addEventListener('click', saveFooter);
 
     startAdmin();
 
