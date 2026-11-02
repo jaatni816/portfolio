@@ -9,8 +9,12 @@
     { "source": "/projects/index.html", "destination": "/projects", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/projects/:slug", "destination": "/projects/index.html" },
-    { "source": "/post/:slug", "destination": "/blog.html" },
+    { "source": "/projects", "destination": "/projects" },
+    { "source": "/projects/:slug", "destination": "/projects" },
+    { "source": "/blog", "destination": "/blog" },
+    { "source": "/blog/:slug", "destination": "/blog" },
+    { "source": "/post/:slug", "destination": "/blog" },
+    { "source": "/:slug", "destination": "/blog" },
     { "source": "/api/:path*", "destination": "/api/:path*" }
   ]
 }

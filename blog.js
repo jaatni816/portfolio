@@ -2,8 +2,9 @@
   var url = window.SUPABASE_URL || '';
   var key = window.SUPABASE_ANON_KEY || '';
 
-  var detail = /^\/post\//.test(location.pathname);
-  var detailSlug = detail ? decodeURIComponent(location.pathname.split('/')[2] || '').replace(/\.html$/i, '') : '';
+  var m = location.pathname.match(/^\/(?:blog|post)\/([^\/]+)\/?$/);
+  var detail = !!(m && m[1] && m[1] !== 'blog' && m[1] !== 'index');
+  var detailSlug = detail ? decodeURIComponent(m[1]).replace(/\.html$/i, '') : '';
 
   function esc(s){
     return String(s == null ? '' : s)
@@ -68,7 +69,7 @@
           '<div class="post-meta"><span class="cat">' + esc(p.category || 'General') + '</span><span>' + esc(fmtDate(p.published_at || p.created_at)) + '</span><span>' + esc(readMins(p.content)) + '</span></div>' +
           '<h3>' + esc(p.title) + '</h3>' +
           '<p>' + esc(p.excerpt) + '</p>' +
-          '<a href="/post/' + encodeURIComponent(p.slug) + '" class="btn btn-primary">Read the full post</a>' +
+          '<a href="/blog/' + encodeURIComponent(p.slug) + '" class="btn btn-primary">Read the full post</a>' +
         '</div>' +
       '</article>';
     }).join('');
